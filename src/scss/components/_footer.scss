@@ -1,0 +1,9 @@
+footer {
+  background-color: get_col(footer-bg);
+  span {
+    line-height: 20px;
+    padding: 0 20px;
+    font-size: 18px;
+    color: get_col(header-text);
+  }
+}
