@@ -5,14 +5,9 @@ import Http from './js/http';
 const game = new Game();
 
 const http = new Http();
-http.loadAllResults();
-document.addEventListener('resultsAreLoaded', event => {
-  console.log(event.detail);
-});
-http.loadAllUsers();
-document.addEventListener('usersAreLoaded', event => {
-  console.log(event.detail);
-});
+http.loadAllResults().then(resp => console.log(resp));
+http.loadAllUsers().then(resp => console.log(resp));
+
 
 document.addEventListener('gameIsOver', (event) => {
   gameOverHundler(event.detail);

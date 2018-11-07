@@ -24,42 +24,40 @@ export default class Game {
   clickCardHundler({target}) {
 
     if (target.hasAttribute('data-code') && !target.classList.contains('show')) {
+
+      const flipCard = () => {
+        target.classList.toggle('show');
+        target.dataset.ischecked = true;
+        this.state.openCards.push(target);
+        this.state.flipped++;
+      };
       const getCardCode = (ind) => {
         return this.state.openCards[ind].dataset.code;
       };
+
       switch(this.state.stage)  {
         case 0:
-          target.classList.toggle('show');
-          target.dataset.ischecked = true;
           this.setTimer();
-          this.state.openCards.push(target);
-          this.state.flipped++;
+          flipCard();
           this.state.stage = 2;
-
           break;
         case 1:
           this.state.openCards.forEach(el => el.classList.toggle('show'));
-          target.classList.toggle('show');
           this.state.openCards = [];
-          this.state.openCards.push(target);
-          this.state.flipped++;
+          flipCard();
           this.state.stage = 2;
           break;
         case 2:
-          target.classList.toggle('show');
-          this.state.openCards.push(target);
-          this.state.flipped++;
+          flipCard();
           this.state.stage = 1;
           if (getCardCode(0) === getCardCode(1)) {
             this.state.openCards.forEach(el => el.classList.add('close'));
             this.state.score--;
             if (this.state.score <= 0 ) {
-              console.log('gameOver');
               this.gameOver();
             }
           }
           break;
-
       }
       this.showState();
     }
@@ -81,7 +79,7 @@ export default class Game {
   }
 
   showState() {
-    this.state.scoreEl.innerHTML = `${this.state.score * 2} / ${this.params.cardsNumber * 2}`;
+    this.state.scoreEl.innerHTML = `${(this.params.cardsNumber - this.state.score) * 2} / ${this.params.cardsNumber * 2}`;
     this.state.flippedEl.innerHTML = `Flipped: ${this.state.flipped}`;
   }
 

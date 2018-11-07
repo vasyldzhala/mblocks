@@ -13,10 +13,10 @@ export default class Http {
       console.log(`ajaxRequest, method=${method}, url=${url}`);
       req.open(method, url, true);
       req.addEventListener('load', () => {
-        if (req.status == 200) {
+        if ( req.status === 200 ) {
           resolve(req.response);
         } else {
-          var error = new Error(req.statusText);
+          const error = new Error(req.statusText);
           error.code = req.status;
           reject(error);
         }
@@ -33,30 +33,18 @@ export default class Http {
     });
   }
 
-  loadResources(script, eventName) {
-    this.ajaxRequest('GET', `${this.baseUrl}/${script}`)
-      .then(
-        respValue => {
-          const allResourse = JSON.parse(respValue);
-          console.log(`Request is fulfilled: ${script}`);
-          const event = new CustomEvent(eventName, {
-            bubbles: true,
-            detail: allResourse
-          });
-          document.dispatchEvent(event);
-        },
-        reason => {
-          console.log(`Rejected: ${reason}`);
-        }
-      );
+  loadResources(script) {
+    return this.ajaxRequest('GET', `${this.baseUrl}/${script}`)
+      .then(resp => JSON.parse(resp),
+            reason => console.log(`Rejected: ${reason}`)
+      )
   }
-
   loadAllResults() {
-    this.loadResources('readresults.php', 'resultsAreLoaded');
+    return this.loadResources('readresults.php');
   }
 
   loadAllUsers() {
-    this.loadResources('readusers.php', 'usersAreLoaded');
+    return this.loadResources('readusers.php');
   }
 
   saveResult(sendData) {
