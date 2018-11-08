@@ -37,23 +37,29 @@ export default class Game {
 
       switch(this.state.stage)  {
         case 0:
+          this.state.isGameProceed = true;
           this.setTimer();
           flipCard();
           this.state.stage = 2;
+          this.state.messageInd = 1;
           break;
         case 1:
           this.state.openCards.forEach(el => el.classList.toggle('show'));
           this.state.openCards = [];
           flipCard();
           this.state.stage = 2;
+          this.state.messageInd = 1;
           break;
         case 2:
           flipCard();
           this.state.stage = 1;
+          this.state.messageInd = 2;
           if (getCardCode(0) === getCardCode(1)) {
             this.state.openCards.forEach(el => el.classList.add('close'));
             this.state.score--;
+            this.state.messageInd = 3;
             if (this.state.score <= 0 ) {
+              this.state.isGameProceed = false;
               this.gameOver();
             }
           }
@@ -65,39 +71,59 @@ export default class Game {
 
   init() {
     this.state = {
-      stage: 0,     // 0 - init game, 1 - first flip, 2 - second flip
+      isGameProceed: false,
+      isMessage: false,
+      stage: 0,                         // 0 - init game, 1 - first flip, 2 - second flip
       score: this.params.cardsNumber,   // unclosed cards' number
-      flipped: 0,  // flips number
+      flipped: 0,                       // flips number
       openCards: [],
+      messageInd: 0,
+      gameMessage: [
+        'Click card to start!',
+        'Chose another one',
+        'Try again! Click another card',
+        'Congratulation! Try again!'
+      ]
+    };
+    this.rend = {
+      messageEl: this.params.stateBarContainer.querySelector('.hint'),
       timeEl: this.params.stateBarContainer.querySelector('.time'),
       scoreEl: this.params.stateBarContainer.querySelector('.score'),
       flippedEl: this.params.stateBarContainer.querySelector('.flipped')
     };
-    this.state.timeEl.innerHTML = `Time: 0 sec`;
+    if ( !this.state.isMessage ) { this.rend.messageEl.hidden = true; }
+    this.rend.timeEl.innerHTML = `Time: 0 sec`;
     this.showState();
     this.dealCards();
   }
 
   showState() {
-    this.state.scoreEl.innerHTML = `${(this.params.cardsNumber - this.state.score) * 2} / ${this.params.cardsNumber * 2}`;
-    this.state.flippedEl.innerHTML = `Flipped: ${this.state.flipped}`;
+    this.rend.messageEl.innerHTML = this.showMessage(this.state.messageInd);
+    this.rend.scoreEl.innerHTML = `${(this.params.cardsNumber - this.state.score) * 2} / ${this.params.cardsNumber * 2}`;
+    this.rend.flippedEl.innerHTML = `Flipped: ${this.state.flipped}`;
+  }
+
+  showMessage(ind) {
+    let str = '';
+    if (this.state.isMessage) { str += this.state.gameMessage[ind]; }
+    return str;
   }
 
   setTimer() {
     this.state.startTime = Date.now();
     const showSeconds = () => {
       const seconds = ((Date.now() - this.state.startTime) * 1e-3).toFixed();
-      if (!isNaN(parseFloat(seconds)) && isFinite(seconds)) {
-        this.state.timeEl.innerHTML = `Time: ${seconds} sec`;
+      if ( this.state.isGameProceed && !isNaN(parseFloat(seconds)) && isFinite(seconds) ) {
+        this.rend.timeEl.innerHTML = `Time: ${seconds} sec`;
       }
     };
     this.state.timer = setInterval(showSeconds, 1000);
   }
 
   stopTimer() {
+    console.log('stop timer!');
     this.state.endTime = Date.now();
     clearInterval(this.state.timer);
-    this.state.timeEl.innerHTML = `Time: 0 sec`;
   }
 
   gameOver() {

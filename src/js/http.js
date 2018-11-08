@@ -1,7 +1,8 @@
 export default class Http {
 
   constructor(params) {
-    this.baseUrl = 'http://localhost:80/camp1/mblocks/db';
+    // this.baseUrl = 'http://localhost:80/camp1/mblocks/db';
+    this.baseUrl = 'http://mblocks.jala.in.ua/db';
   };
 
   ajaxRequest(method, url, sendData = null) {

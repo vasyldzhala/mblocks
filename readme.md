@@ -3,9 +3,10 @@
 ## Description
 
 It's a great card game to test and train your memory skills.
-Cards lays in rows, face down. Turn over any two cards. If the two cards match, keep them. 
+Cards lays in rows, face down. Every card has a pair. Turn over any two cards. If the two cards match, keep them. 
 If they don't match, they will be turned back over. Remember what was on each card and where it was. 
-Try to reduce the number of flips and time. The game is over when all the cards have been matched. Enjoy!
+Try to reduce the number of flips and time. The game is over when all the cards have been matched. 
+Enjoy! You can try it here: [mblocks.jala.in.ua](http://mblocks.jala.in.ua).
 
 ![screenshot](https://github.com/vasyldzhala/mblocks/blob/master/mblocks_screen.JPG)
 

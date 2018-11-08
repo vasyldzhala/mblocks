@@ -6,4 +6,10 @@ footer {
     font-size: 18px;
     color: get_col(header-text);
   }
+  .hint {
+    width: 200px;
+    font-size: 14px;
+    text-align: left;
+    overflow: visible;
+  }
 }
